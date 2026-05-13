@@ -1,1 +1,1 @@
-# kids-country-capital-trivia
+# Kids-dictionary-app
