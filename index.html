@@ -3,928 +3,603 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Countries & Capitals Trivia</title>
+  <title>Kids Dictionary</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 40%, #a1c4fd 100%);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      padding: 24px 16px 40px;
     }
 
-    .container {
-      width: 100%;
-      max-width: 700px;
-    }
-
-    /* ── SCREEN PANELS ── */
-    .screen {
-      display: none;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 40px 36px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      animation: fadeIn 0.4s ease;
-    }
-
-    .screen.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── WELCOME SCREEN ── */
-    .welcome-icon {
-      font-size: 72px;
+    /* ── HEADER ── */
+    .app-header {
       text-align: center;
-      margin-bottom: 16px;
-      animation: bounce 1.5s infinite;
+      margin-bottom: 28px;
     }
 
-    @keyframes bounce {
+    .app-icon {
+      font-size: 60px;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(-10px); }
     }
 
     h1 {
-      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 900;
       color: #fff;
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      text-shadow: 0 3px 12px rgba(0,0,0,0.2);
+      margin-top: 6px;
     }
 
-    .subtitle {
-      text-align: center;
-      color: #a0c4ff;
+    .tagline {
+      color: rgba(255,255,255,0.85);
       font-size: 1.05rem;
-      margin-bottom: 32px;
+      margin-top: 4px;
     }
 
-    .info-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 32px;
+    /* ── SEARCH BOX ── */
+    .search-wrap {
+      max-width: 560px;
+      margin: 0 auto 28px;
+      position: relative;
     }
 
-    .info-card {
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 16px 12px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .info-card .icon { font-size: 28px; margin-bottom: 6px; }
-
-    .info-card .label {
-      color: #cbd5e1;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
-    }
-
-    .info-card .value {
-      color: #fff;
-      font-weight: 700;
-      font-size: 1rem;
-    }
-
-    /* difficulty selector */
-    .difficulty-label {
-      color: #a0c4ff;
-      font-size: 0.9rem;
-      text-align: center;
-      margin-bottom: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .difficulty-selector {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 28px;
-    }
-
-    .diff-btn {
-      padding: 8px 22px;
-      border-radius: 50px;
-      border: 2px solid rgba(255,255,255,0.2);
-      background: transparent;
-      color: #cbd5e1;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .diff-btn:hover { border-color: #60a5fa; color: #fff; }
-
-    .diff-btn.selected {
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
-      border-color: transparent;
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
-    }
-
-    /* ── BUTTONS ── */
-    .btn-primary {
-      display: block;
+    .search-input {
       width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #f59e0b, #ef4444);
-      color: #fff;
+      padding: 18px 60px 18px 22px;
       border: none;
-      border-radius: 14px;
-      font-size: 1.15rem;
-      font-weight: 800;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      background: #fff;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+      outline: none;
+      transition: box-shadow 0.2s;
+    }
+
+    .search-input::placeholder { color: #aaa; font-weight: 400; }
+
+    .search-input:focus {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
       cursor: pointer;
       transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
-      letter-spacing: 0.03em;
+      box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(239, 68, 68, 0.45);
+    .search-btn:hover { transform: translateY(-50%) scale(1.05); }
+    .search-btn:active { transform: translateY(-50%) scale(0.97); }
+
+    /* ── WORD CARD ── */
+    .card {
+      max-width: 640px;
+      margin: 0 auto 20px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 28px 28px 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .btn-primary:active { transform: translateY(0); }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
 
-    /* ── QUIZ SCREEN ── */
-    .quiz-header {
+    /* ── WORD TITLE ROW ── */
+    .word-title-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .progress-info {
-      color: #a0c4ff;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .score-badge {
-      background: linear-gradient(135deg, #f59e0b, #ef4444);
-      color: #fff;
-      padding: 6px 16px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .progress-bar-wrap {
-      background: rgba(255,255,255,0.1);
-      border-radius: 50px;
-      height: 8px;
-      margin-bottom: 28px;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-      border-radius: 50px;
-      transition: width 0.4s ease;
-    }
-
-    .question-category {
-      display: inline-block;
-      background: rgba(99, 102, 241, 0.25);
-      color: #a5b4fc;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 4px 14px;
-      border-radius: 50px;
-      margin-bottom: 12px;
-    }
-
-    .question-text {
-      color: #fff;
-      font-size: 1.3rem;
-      font-weight: 700;
-      line-height: 1.5;
-      margin-bottom: 28px;
-      min-height: 60px;
-    }
-
-    .question-flag {
-      font-size: 56px;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .answers-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      flex-wrap: wrap;
       gap: 12px;
-    }
-
-    .answer-btn {
-      background: rgba(255, 255, 255, 0.07);
-      border: 2px solid rgba(255, 255, 255, 0.12);
-      border-radius: 14px;
-      padding: 16px 14px;
-      color: #e2e8f0;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-      line-height: 1.3;
-    }
-
-    .answer-btn:hover:not(:disabled) {
-      background: rgba(99, 102, 241, 0.25);
-      border-color: #6366f1;
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .answer-btn.correct {
-      background: rgba(34, 197, 94, 0.25) !important;
-      border-color: #22c55e !important;
-      color: #86efac !important;
-      animation: pulse-green 0.4s ease;
-    }
-
-    .answer-btn.wrong {
-      background: rgba(239, 68, 68, 0.25) !important;
-      border-color: #ef4444 !important;
-      color: #fca5a5 !important;
-      animation: shake 0.4s ease;
-    }
-
-    @keyframes pulse-green {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.04); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25%       { transform: translateX(-6px); }
-      75%       { transform: translateX(6px); }
-    }
-
-    .answer-btn:disabled { cursor: default; }
-
-    /* feedback bar */
-    .feedback-bar {
-      margin-top: 20px;
-      padding: 14px 20px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-      min-height: 50px;
-    }
-
-    .feedback-bar.show { opacity: 1; }
-
-    .feedback-bar.correct-fb {
-      background: rgba(34, 197, 94, 0.18);
-      color: #86efac;
-      border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .feedback-bar.wrong-fb {
-      background: rgba(239, 68, 68, 0.18);
-      color: #fca5a5;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    /* ── RESULTS SCREEN ── */
-    .results-icon {
-      font-size: 80px;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .results-title {
-      text-align: center;
-      color: #fff;
-      font-size: 1.9rem;
-      font-weight: 800;
       margin-bottom: 6px;
     }
 
-    .results-subtitle {
-      text-align: center;
-      color: #a0c4ff;
-      margin-bottom: 28px;
-      font-size: 1rem;
-    }
-
-    .score-circle {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 28px;
-      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.45);
-    }
-
-    .score-circle .big-num {
-      color: #fff;
-      font-size: 2.4rem;
+    .word-title {
+      font-size: 2.2rem;
       font-weight: 900;
-      line-height: 1;
+      color: #333;
+      text-transform: capitalize;
     }
 
-    .score-circle .out-of {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.85rem;
+    .part-of-speech {
+      background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 4px 14px;
+      border-radius: 50px;
     }
 
-    .stats-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 28px;
+    /* ── PRONUNCIATION ROW ── */
+    .pronunciation-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
-    .stat-box {
-      background: rgba(255,255,255,0.07);
-      border-radius: 14px;
-      padding: 16px 10px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .stat-box .s-icon { font-size: 24px; margin-bottom: 6px; }
-    .stat-box .s-label { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-    .stat-box .s-value { color: #fff; font-weight: 800; font-size: 1.15rem; }
-
-    .rank-badge {
-      text-align: center;
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 24px;
-    }
-
-    .rank-badge .rank-title { color: #fcd34d; font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
-    .rank-badge .rank-desc  { color: #94a3b8; font-size: 0.88rem; }
-
-    .btn-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .btn-secondary {
-      padding: 14px;
-      background: rgba(255,255,255,0.08);
-      border: 2px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      color: #e2e8f0;
+    .phonetic-text {
+      color: #888;
       font-size: 1rem;
+      font-style: italic;
+    }
+
+    .hear-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #43e97b, #38f9d7);
+      border: none;
+      border-radius: 50px;
+      padding: 7px 18px;
+      color: #fff;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
+      box-shadow: 0 3px 12px rgba(67, 233, 123, 0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
     }
 
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.14);
-      border-color: rgba(255,255,255,0.3);
+    .hear-btn:hover { transform: scale(1.06); }
+    .hear-btn:active { transform: scale(0.96); }
+
+    .hear-btn.playing {
+      background: linear-gradient(135deg, #f5af19, #f12711);
+      box-shadow: 0 3px 12px rgba(241, 39, 17, 0.4);
+      animation: pulse-btn 0.7s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-btn {
+      from { transform: scale(1); }
+      to   { transform: scale(1.08); }
+    }
+
+    /* ── SECTION LABELS ── */
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #bbb;
+      margin-bottom: 6px;
+    }
+
+    /* ── MEANING ── */
+    .meaning-block {
+      background: #fef9ee;
+      border-left: 5px solid #f9ca24;
+      border-radius: 0 14px 14px 0;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .meaning-text {
+      font-size: 1.1rem;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ── EXAMPLE SENTENCE ── */
+    .example-block {
+      background: #eef7ff;
+      border-left: 5px solid #74b9ff;
+      border-radius: 0 14px 14px 0;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .example-text {
+      font-size: 1rem;
+      color: #555;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .example-text::before { content: '"'; }
+    .example-text::after  { content: '"'; }
+
+    /* ── NO EXAMPLE NOTICE ── */
+    .no-example {
+      color: #bbb;
+      font-size: 0.92rem;
+      font-style: italic;
+    }
+
+    /* ── MORE MEANINGS TOGGLE ── */
+    .more-btn {
+      background: none;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      padding: 6px 18px;
+      color: #888;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      margin-top: 4px;
+    }
+
+    .more-btn:hover { border-color: #a18cd1; color: #a18cd1; }
+
+    .extra-meanings { display: none; margin-top: 12px; }
+    .extra-meanings.open { display: block; }
+
+    .meaning-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .meaning-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    /* ── ERROR CARD ── */
+    .error-card {
+      max-width: 560px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .error-icon { font-size: 56px; margin-bottom: 12px; }
+
+    .error-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #f5576c;
+      margin-bottom: 6px;
+    }
+
+    .error-msg { color: #888; font-size: 1rem; }
+
+    /* ── LOADING SPINNER ── */
+    .spinner-wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border: 6px solid rgba(255,255,255,0.5);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner-text { color: #fff; font-size: 1.1rem; font-weight: 600; }
+
+    /* ── WELCOME HINT ── */
+    .welcome-hint {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hint-bubbles {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .hint-bubble {
+      background: rgba(255,255,255,0.4);
+      backdrop-filter: blur(6px);
+      border: 2px solid rgba(255,255,255,0.6);
+      border-radius: 50px;
+      padding: 8px 18px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .hint-bubble:hover {
+      background: rgba(255,255,255,0.6);
+      transform: scale(1.05);
+    }
+
+    .welcome-title {
+      color: rgba(255,255,255,0.9);
+      font-size: 1.1rem;
+      font-weight: 600;
     }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 500px) {
-      .screen { padding: 28px 20px; }
-      h1 { font-size: 1.6rem; }
-      .answers-grid { grid-template-columns: 1fr; }
-      .info-cards { grid-template-columns: 1fr; }
-      .stats-row  { grid-template-columns: 1fr; }
-      .btn-row    { grid-template-columns: 1fr; }
+    @media (max-width: 480px) {
+      h1 { font-size: 1.8rem; }
+      .word-title { font-size: 1.7rem; }
+      .card { padding: 22px 18px; }
     }
   </style>
 </head>
 <body>
-<!-- fixed mute button – always visible -->
-<button class="mute-btn" onclick="toggleMute()" title="Toggle sound"
-  style="position:fixed;top:16px;right:16px;z-index:999;background:rgba(255,255,255,0.1);
-         border:1px solid rgba(255,255,255,0.2);border-radius:50%;width:42px;height:42px;
-         font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-         backdrop-filter:blur(8px);transition:background 0.2s;">🔊</button>
 
-<div class="container">
+  <header class="app-header">
+    <span class="app-icon">📖</span>
+    <h1>Kids Dictionary</h1>
+    <p class="tagline">Look up any word — fast &amp; fun!</p>
+  </header>
 
-  <!-- ══ WELCOME SCREEN ══ -->
-  <div id="screen-welcome" class="screen active">
-    <div class="welcome-icon">🌍</div>
-    <h1>Countries &amp; Capitals</h1>
-    <p class="subtitle">Test your world geography knowledge!</p>
-
-    <div class="info-cards">
-      <div class="info-card">
-        <div class="icon">❓</div>
-        <div class="label">Questions</div>
-        <div class="value" id="q-count-display">15</div>
-      </div>
-      <div class="info-card">
-        <div class="icon">🎯</div>
-        <div class="label">Format</div>
-        <div class="value">4 Choices</div>
-      </div>
-      <div class="info-card">
-        <div class="icon">🏆</div>
-        <div class="label">Mode</div>
-        <div class="value">Single Player</div>
-      </div>
-    </div>
-
-    <div class="difficulty-label">Choose Difficulty</div>
-    <div class="difficulty-selector">
-      <button class="diff-btn selected" data-diff="easy">Easy</button>
-      <button class="diff-btn" data-diff="medium">Medium</button>
-      <button class="diff-btn" data-diff="hard">Hard</button>
-    </div>
-
-    <button class="btn-primary" id="btn-start">🚀 Start Quiz!</button>
+  <div class="search-wrap">
+    <input
+      id="search-input"
+      class="search-input"
+      type="text"
+      placeholder="Type a word, e.g. happy..."
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+    />
+    <button class="search-btn" id="search-btn">Search 🔍</button>
   </div>
 
-  <!-- ══ QUIZ SCREEN ══ -->
-  <div id="screen-quiz" class="screen">
-    <div class="quiz-header">
-      <span class="progress-info" id="progress-info">Question 1 of 15</span>
-      <span class="score-badge" id="score-display">Score: 0</span>
-    </div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
-    </div>
-
-    <div class="question-flag" id="question-flag"></div>
-    <div class="question-category" id="question-category">Capital City</div>
-    <div class="question-text" id="question-text"></div>
-
-    <div class="answers-grid" id="answers-grid"></div>
-
-    <div class="feedback-bar" id="feedback-bar"></div>
-  </div>
-
-  <!-- ══ RESULTS SCREEN ══ -->
-  <div id="screen-results" class="screen">
-    <div class="results-icon" id="results-icon">🎉</div>
-    <div class="results-title" id="results-title">Fantastic!</div>
-    <div class="results-subtitle" id="results-subtitle">You really know your capitals!</div>
-
-    <div class="score-circle">
-      <div class="big-num" id="final-score">0</div>
-      <div class="out-of" id="final-out-of">out of 15</div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-box">
-        <div class="s-icon">✅</div>
-        <div class="s-label">Correct</div>
-        <div class="s-value" id="stat-correct">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="s-icon">❌</div>
-        <div class="s-label">Wrong</div>
-        <div class="s-value" id="stat-wrong">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="s-icon">📊</div>
-        <div class="s-label">Accuracy</div>
-        <div class="s-value" id="stat-accuracy">0%</div>
-      </div>
-    </div>
-
-    <div class="rank-badge">
-      <div class="rank-title" id="rank-title">🌟 World Explorer</div>
-      <div class="rank-desc" id="rank-desc">Keep learning about our amazing world!</div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn-secondary" id="btn-same-diff">Play Again</button>
-      <button class="btn-primary" id="btn-menu">Main Menu</button>
-    </div>
-  </div>
-
-</div>
+  <div id="result-area"></div>
 
 <script>
-// ══════════════════════════════════════════════
-//  QUESTION DATA
-// ══════════════════════════════════════════════
-const ALL_QUESTIONS = [
-  // Easy – well-known world capitals
-  { flag:"🇫🇷", q:"What is the capital of France?",       a:"Paris",         wrong:["London","Madrid","Berlin"],              cat:"Capital City", diff:"easy" },
-  { flag:"🇯🇵", q:"What is the capital of Japan?",        a:"Tokyo",         wrong:["Beijing","Seoul","Bangkok"],             cat:"Capital City", diff:"easy" },
-  { flag:"🇦🇺", q:"What is the capital of Australia?",    a:"Canberra",      wrong:["Sydney","Melbourne","Brisbane"],         cat:"Capital City", diff:"easy" },
-  { flag:"🇧🇷", q:"What is the capital of Brazil?",       a:"Brasília",      wrong:["Rio de Janeiro","São Paulo","Salvador"], cat:"Capital City", diff:"easy" },
-  { flag:"🇩🇪", q:"What is the capital of Germany?",      a:"Berlin",        wrong:["Munich","Hamburg","Frankfurt"],          cat:"Capital City", diff:"easy" },
-  { flag:"🇨🇦", q:"What is the capital of Canada?",       a:"Ottawa",        wrong:["Toronto","Vancouver","Montreal"],        cat:"Capital City", diff:"easy" },
-  { flag:"🇮🇹", q:"What is the capital of Italy?",        a:"Rome",          wrong:["Milan","Naples","Venice"],               cat:"Capital City", diff:"easy" },
-  { flag:"🇷🇺", q:"What is the capital of Russia?",       a:"Moscow",        wrong:["St. Petersburg","Novosibirsk","Kazan"],  cat:"Capital City", diff:"easy" },
-  { flag:"🇨🇳", q:"What is the capital of China?",        a:"Beijing",       wrong:["Shanghai","Guangzhou","Shenzhen"],       cat:"Capital City", diff:"easy" },
-  { flag:"🇺🇸", q:"What is the capital of the United States?", a:"Washington D.C.", wrong:["New York","Los Angeles","Chicago"], cat:"Capital City", diff:"easy" },
-  { flag:"🇬🇧", q:"What is the capital of the United Kingdom?", a:"London",  wrong:["Manchester","Edinburgh","Birmingham"],   cat:"Capital City", diff:"easy" },
-  { flag:"🇪🇸", q:"What is the capital of Spain?",        a:"Madrid",        wrong:["Barcelona","Seville","Valencia"],        cat:"Capital City", diff:"easy" },
-  // "Which country" questions – easy
-  { flag:"🗺️",  q:"Paris is the capital of which country?",      a:"France",      wrong:["Italy","Belgium","Switzerland"],       cat:"Which Country", diff:"easy" },
-  { flag:"🗺️",  q:"Tokyo is the capital of which country?",      a:"Japan",       wrong:["China","South Korea","Vietnam"],        cat:"Which Country", diff:"easy" },
-  { flag:"🗺️",  q:"Rome is the capital of which country?",       a:"Italy",       wrong:["Spain","Greece","Portugal"],            cat:"Which Country", diff:"easy" },
-  // Medium – less-obvious capitals
-  { flag:"🇲🇽", q:"What is the capital of Mexico?",        a:"Mexico City",   wrong:["Guadalajara","Monterrey","Puebla"],       cat:"Capital City", diff:"medium" },
-  { flag:"🇿🇦", q:"What is the capital of South Africa?",  a:"Pretoria",      wrong:["Cape Town","Johannesburg","Durban"],      cat:"Capital City", diff:"medium" },
-  { flag:"🇮🇳", q:"What is the capital of India?",         a:"New Delhi",     wrong:["Mumbai","Kolkata","Chennai"],             cat:"Capital City", diff:"medium" },
-  { flag:"🇪🇬", q:"What is the capital of Egypt?",         a:"Cairo",         wrong:["Alexandria","Luxor","Giza"],              cat:"Capital City", diff:"medium" },
-  { flag:"🇰🇪", q:"What is the capital of Kenya?",         a:"Nairobi",       wrong:["Mombasa","Kisumu","Nakuru"],              cat:"Capital City", diff:"medium" },
-  { flag:"🇦🇷", q:"What is the capital of Argentina?",     a:"Buenos Aires",  wrong:["Córdoba","Rosario","Mendoza"],            cat:"Capital City", diff:"medium" },
-  { flag:"🇹🇭", q:"What is the capital of Thailand?",      a:"Bangkok",       wrong:["Chiang Mai","Phuket","Pattaya"],          cat:"Capital City", diff:"medium" },
-  { flag:"🇵🇪", q:"What is the capital of Peru?",          a:"Lima",          wrong:["Cusco","Arequipa","Trujillo"],            cat:"Capital City", diff:"medium" },
-  { flag:"🇳🇬", q:"What is the capital of Nigeria?",       a:"Abuja",         wrong:["Lagos","Kano","Ibadan"],                  cat:"Capital City", diff:"medium" },
-  { flag:"🇵🇰", q:"What is the capital of Pakistan?",      a:"Islamabad",     wrong:["Karachi","Lahore","Peshawar"],            cat:"Capital City", diff:"medium" },
-  { flag:"🇸🇦", q:"What is the capital of Saudi Arabia?",  a:"Riyadh",        wrong:["Jeddah","Mecca","Medina"],               cat:"Capital City", diff:"medium" },
-  { flag:"🇹🇷", q:"What is the capital of Turkey?",        a:"Ankara",        wrong:["Istanbul","Izmir","Bursa"],              cat:"Capital City", diff:"medium" },
-  // "Which country" – medium
-  { flag:"🗺️",  q:"Nairobi is the capital of which country?",    a:"Kenya",        wrong:["Tanzania","Uganda","Ethiopia"],         cat:"Which Country", diff:"medium" },
-  { flag:"🗺️",  q:"Buenos Aires is the capital of which country?", a:"Argentina",  wrong:["Chile","Brazil","Uruguay"],             cat:"Which Country", diff:"medium" },
-  { flag:"🗺️",  q:"Canberra is the capital of which country?",   a:"Australia",   wrong:["New Zealand","Canada","South Africa"],  cat:"Which Country", diff:"medium" },
-  // Hard – tricky or lesser-known capitals
-  { flag:"🇨🇱", q:"What is the capital of Chile?",         a:"Santiago",      wrong:["Valparaíso","Concepción","Antofagasta"],  cat:"Capital City", diff:"hard" },
-  { flag:"🇸🇪", q:"What is the capital of Sweden?",        a:"Stockholm",     wrong:["Oslo","Copenhagen","Helsinki"],           cat:"Capital City", diff:"hard" },
-  { flag:"🇳🇴", q:"What is the capital of Norway?",        a:"Oslo",          wrong:["Bergen","Trondheim","Stavanger"],         cat:"Capital City", diff:"hard" },
-  { flag:"🇳🇿", q:"What is the capital of New Zealand?",   a:"Wellington",    wrong:["Auckland","Christchurch","Hamilton"],     cat:"Capital City", diff:"hard" },
-  { flag:"🇵🇹", q:"What is the capital of Portugal?",      a:"Lisbon",        wrong:["Porto","Faro","Braga"],                   cat:"Capital City", diff:"hard" },
-  { flag:"🇬🇷", q:"What is the capital of Greece?",        a:"Athens",        wrong:["Thessaloniki","Patras","Heraklion"],      cat:"Capital City", diff:"hard" },
-  { flag:"🇺🇦", q:"What is the capital of Ukraine?",       a:"Kyiv",          wrong:["Kharkiv","Odesa","Lviv"],                 cat:"Capital City", diff:"hard" },
-  { flag:"🇲🇦", q:"What is the capital of Morocco?",       a:"Rabat",         wrong:["Casablanca","Marrakesh","Fez"],           cat:"Capital City", diff:"hard" },
-  { flag:"🇮🇩", q:"What is the capital of Indonesia?",     a:"Jakarta",       wrong:["Bali","Surabaya","Bandung"],              cat:"Capital City", diff:"hard" },
-  { flag:"🇵🇭", q:"What is the capital of the Philippines?", a:"Manila",      wrong:["Cebu","Davao","Quezon City"],             cat:"Capital City", diff:"hard" },
-  { flag:"🇨🇴", q:"What is the capital of Colombia?",      a:"Bogotá",        wrong:["Medellín","Cali","Barranquilla"],         cat:"Capital City", diff:"hard" },
-  { flag:"🇻🇳", q:"What is the capital of Vietnam?",       a:"Hanoi",         wrong:["Ho Chi Minh City","Da Nang","Hue"],       cat:"Capital City", diff:"hard" },
-  // "Which country" – hard
-  { flag:"🗺️",  q:"Wellington is the capital of which country?", a:"New Zealand",  wrong:["Australia","Fiji","Papua New Guinea"],  cat:"Which Country", diff:"hard" },
-  { flag:"🗺️",  q:"Rabat is the capital of which country?",      a:"Morocco",      wrong:["Algeria","Tunisia","Libya"],            cat:"Which Country", diff:"hard" },
-  { flag:"🗺️",  q:"Bogotá is the capital of which country?",     a:"Colombia",     wrong:["Venezuela","Ecuador","Peru"],           cat:"Which Country", diff:"hard" },
-];
+const API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
 
-// ══════════════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════════════
-const QUESTIONS_PER_QUIZ = 15;
+const input   = document.getElementById('search-input');
+const btn     = document.getElementById('search-btn');
+const area    = document.getElementById('result-area');
 
-const RANKS = [
-  { min: 0.9,  title:"🌟 World Explorer",     desc:"Outstanding! You're a geography genius!" },
-  { min: 0.75, title:"🌎 Globe Trotter",       desc:"Great job! You know the world really well!" },
-  { min: 0.6,  title:"🗺️ Map Reader",          desc:"Nice work! Keep exploring the world!" },
-  { min: 0.4,  title:"✈️ Curious Traveller",   desc:"Good effort! Practice makes perfect!" },
-  { min: 0,    title:"🌱 Young Adventurer",    desc:"Keep going — every explorer starts somewhere!" },
-];
+let currentUtterance = null;
+let currentAudio     = null;
 
-// ══════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════
-let selectedDiff   = "easy";
-let quizQuestions  = [];
-let currentIndex   = 0;
-let score          = 0;
-let answered       = false;
+// ── INITIAL STATE ──────────────────────────────
+showWelcome();
 
-// ══════════════════════════════════════════════
-//  HELPERS
-// ══════════════════════════════════════════════
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+// ── EVENT LISTENERS ────────────────────────────
+btn.addEventListener('click', doSearch);
+input.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+// ── SEARCH ─────────────────────────────────────
+async function doSearch() {
+  const word = input.value.trim();
+  if (!word) { input.focus(); return; }
+
+  stopAnyAudio();
+  showLoading();
+
+  try {
+    const res  = await fetch(API_BASE + encodeURIComponent(word.toLowerCase()));
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json();
+    showResult(data);
+  } catch {
+    showError(word);
   }
-  return a;
 }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+// ── RENDER RESULT ──────────────────────────────
+function showResult(data) {
+  const entry    = data[0];
+  const word     = entry.word;
+  const phonetic = getPhonetic(entry);
+  const audioUrl = getAudioUrl(entry);
+  const meanings = entry.meanings || [];
 
-function buildQuiz(diff) {
-  const pool = ALL_QUESTIONS.filter(q => q.diff === diff);
-  const shuffled = shuffle(pool);
-  return shuffled.slice(0, Math.min(QUESTIONS_PER_QUIZ, shuffled.length));
-}
+  if (!meanings.length) { showError(word); return; }
 
-// ══════════════════════════════════════════════
-//  QUIZ LOGIC
-// ══════════════════════════════════════════════
-function startQuiz() {
-  quizQuestions = buildQuiz(selectedDiff);
-  currentIndex  = 0;
-  score         = 0;
-  document.getElementById('q-count-display').textContent = quizQuestions.length;
-  showScreen('screen-quiz');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const q    = quizQuestions[currentIndex];
-  const total = quizQuestions.length;
-  answered   = false;
-
-  // header
-  document.getElementById('progress-info').textContent  = `Question ${currentIndex + 1} of ${total}`;
-  document.getElementById('score-display').textContent  = `Score: ${score}`;
-  document.getElementById('progress-bar').style.width   = `${(currentIndex / total) * 100}%`;
-
-  // question
-  document.getElementById('question-flag').textContent     = q.flag;
-  document.getElementById('question-category').textContent = q.cat;
-  document.getElementById('question-text').textContent     = q.q;
-
-  // answers
-  const options = shuffle([q.a, ...q.wrong]);
-  const grid    = document.getElementById('answers-grid');
-  grid.innerHTML = '';
-
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className   = 'answer-btn';
-    btn.textContent = opt;
-    btn.addEventListener('click', () => handleAnswer(btn, opt, q.a));
-    grid.appendChild(btn);
-  });
-
-  // feedback
-  const fb = document.getElementById('feedback-bar');
-  fb.className = 'feedback-bar';
-  fb.textContent = '';
-}
-
-function handleAnswer(btn, chosen, correct) {
-  if (answered) return;
-  answered = true;
-
-  const allBtns = document.querySelectorAll('.answer-btn');
-  allBtns.forEach(b => b.disabled = true);
-
-  const fb = document.getElementById('feedback-bar');
-
-  if (chosen === correct) {
-    score++;
-    btn.classList.add('correct');
-    fb.className   = 'feedback-bar correct-fb show';
-    fb.textContent = '✅ Correct! Well done!';
-    playCorrect();
-  } else {
-    btn.classList.add('wrong');
-    // highlight correct answer
-    allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
-    fb.className   = 'feedback-bar wrong-fb show';
-    fb.textContent = `❌ Not quite! The answer is ${correct}.`;
-    playWrong();
-  }
-
-  document.getElementById('score-display').textContent = `Score: ${score}`;
-
-  setTimeout(() => {
-    currentIndex++;
-    if (currentIndex < quizQuestions.length) {
-      renderQuestion();
-    } else {
-      showResults();
+  // Flatten all definitions across meanings into structured list
+  const allDefs = [];
+  for (const m of meanings) {
+    for (const d of m.definitions) {
+      allDefs.push({ pos: m.partOfSpeech, def: d.definition, ex: d.example || null });
     }
-  }, 1600);
-}
+  }
 
-// ══════════════════════════════════════════════
-//  RESULTS
-// ══════════════════════════════════════════════
-function showResults() {
-  const total    = quizQuestions.length;
-  const wrong    = total - score;
-  const pct      = score / total;
-  const accuracy = Math.round(pct * 100);
+  const first   = allDefs[0];
+  const extras  = allDefs.slice(1, 8); // cap at 7 extras
 
-  // score circle
-  document.getElementById('final-score').textContent  = score;
-  document.getElementById('final-out-of').textContent = `out of ${total}`;
+  area.innerHTML = `
+    <div class="card">
+      <div class="word-title-row">
+        <span class="word-title">${esc(word)}</span>
+        <span class="part-of-speech">${esc(first.pos)}</span>
+      </div>
 
-  // stats
-  document.getElementById('stat-correct').textContent  = score;
-  document.getElementById('stat-wrong').textContent    = wrong;
-  document.getElementById('stat-accuracy').textContent = `${accuracy}%`;
+      <div class="pronunciation-row">
+        ${phonetic ? `<span class="phonetic-text">${esc(phonetic)}</span>` : ''}
+        <button class="hear-btn" id="hear-btn">
+          🔊 Hear it!
+        </button>
+      </div>
 
-  // rank
-  const rank = RANKS.find(r => pct >= r.min);
-  document.getElementById('rank-title').textContent = rank.title;
-  document.getElementById('rank-desc').textContent  = rank.desc;
+      <div class="section-label">Meaning</div>
+      <div class="meaning-block">
+        <div class="meaning-text">${esc(first.def)}</div>
+      </div>
 
-  // icon & title
-  let icon, title, sub;
-  if (pct >= 0.9)       { icon = "🎉"; title = "Incredible!";   sub = "You're a geography champion!"; }
-  else if (pct >= 0.75) { icon = "🌟"; title = "Fantastic!";    sub = "You really know your capitals!"; }
-  else if (pct >= 0.6)  { icon = "👏"; title = "Well Done!";    sub = "Nice geography knowledge!"; }
-  else if (pct >= 0.4)  { icon = "💪"; title = "Good Try!";     sub = "Keep exploring the world!"; }
-  else                  { icon = "🌱"; title = "Keep Learning!"; sub = "Every explorer starts somewhere!"; }
+      <div class="section-label">Example</div>
+      <div class="example-block">
+        ${first.ex
+          ? `<div class="example-text">${esc(first.ex)}</div>`
+          : `<div class="no-example">No example available for this meaning.</div>`
+        }
+      </div>
 
-  document.getElementById('results-icon').textContent    = icon;
-  document.getElementById('results-title').textContent   = title;
-  document.getElementById('results-subtitle').textContent = sub;
+      ${extras.length ? `
+        <button class="more-btn" id="more-btn">Show more meanings (${extras.length})</button>
+        <div class="extra-meanings" id="extra-meanings">
+          ${extras.map(d => `
+            <div class="meaning-item">
+              <div class="word-title-row" style="margin-bottom:6px">
+                <span class="part-of-speech">${esc(d.pos)}</span>
+              </div>
+              <div class="section-label">Meaning</div>
+              <div class="meaning-block">
+                <div class="meaning-text">${esc(d.def)}</div>
+              </div>
+              ${d.ex ? `
+                <div class="section-label">Example</div>
+                <div class="example-block">
+                  <div class="example-text">${esc(d.ex)}</div>
+                </div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
 
-  // progress bar to 100%
-  document.getElementById('progress-bar').style.width = '100%';
-
-  showScreen('screen-results');
-  playVictory();
-}
-
-// ══════════════════════════════════════════════
-//  SOUND ENGINE  (Web Audio API – no external files)
-// ══════════════════════════════════════════════
-let audioCtx = null;
-let muted    = false;
-
-function getCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
-}
-
-/* --- low-level helpers --- */
-function playTone(freq, startTime, dur, type = 'sine', gainVal = 0.4, ctx) {
-  const osc  = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.type      = type;
-  osc.frequency.setValueAtTime(freq, startTime);
-  gain.gain.setValueAtTime(gainVal, startTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
-  osc.start(startTime);
-  osc.stop(startTime + dur + 0.01);
-}
-
-function playFreqSweep(startFreq, endFreq, startTime, dur, type = 'sine', gainVal = 0.35, ctx) {
-  const osc  = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.type = type;
-  osc.frequency.setValueAtTime(startFreq, startTime);
-  osc.frequency.exponentialRampToValueAtTime(endFreq, startTime + dur);
-  gain.gain.setValueAtTime(gainVal, startTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
-  osc.start(startTime);
-  osc.stop(startTime + dur + 0.01);
-}
-
-/* --- correct sound variants --- */
-function soundCorrect1(ctx) { // ascending chime  C5→E5→G5
-  const t = ctx.currentTime;
-  [[523,0],[659,0.12],[784,0.24]].forEach(([f,d]) => playTone(f, t+d, 0.22, 'sine', 0.38, ctx));
-}
-
-function soundCorrect2(ctx) { // sparkle sweep + ping
-  const t = ctx.currentTime;
-  playFreqSweep(400, 1200, t, 0.18, 'sine', 0.3, ctx);
-  playTone(1047, t+0.2, 0.25, 'sine', 0.4, ctx);
-}
-
-function soundCorrect3(ctx) { // happy 4-note fanfare  C5→E5→G5→C6
-  const t = ctx.currentTime;
-  [[523,0],[659,0.1],[784,0.2],[1047,0.32]].forEach(([f,d]) => playTone(f, t+d, 0.18, 'triangle', 0.4, ctx));
-}
-
-function soundCorrect4(ctx) { // bouncy pop  (two quick sine bursts)
-  const t = ctx.currentTime;
-  playFreqSweep(600, 900, t, 0.08, 'sine', 0.35, ctx);
-  playFreqSweep(700, 1100, t+0.12, 0.1, 'sine', 0.35, ctx);
-  playTone(880, t+0.25, 0.2, 'sine', 0.35, ctx);
-}
-
-const correctSounds = [soundCorrect1, soundCorrect2, soundCorrect3, soundCorrect4];
-
-/* --- wrong sound variants --- */
-function soundWrong1(ctx) { // classic buzzer
-  const t = ctx.currentTime;
-  playTone(180, t, 0.4, 'sawtooth', 0.25, ctx);
-  playTone(140, t+0.1, 0.35, 'sawtooth', 0.2, ctx);
-}
-
-function soundWrong2(ctx) { // womp-womp descending trombone
-  const t = ctx.currentTime;
-  playFreqSweep(440, 300, t,      0.22, 'sawtooth', 0.22, ctx);
-  playFreqSweep(300, 180, t+0.22, 0.25, 'sawtooth', 0.22, ctx);
-}
-
-function soundWrong3(ctx) { // quick descending blip
-  const t = ctx.currentTime;
-  playFreqSweep(600, 200, t, 0.3, 'square', 0.18, ctx);
-}
-
-function soundWrong4(ctx) { // cartoon boing (sine warble)
-  const t = ctx.currentTime;
-  const osc  = ctx.createOscillator();
-  const lfo  = ctx.createOscillator();
-  const lfoG = ctx.createGain();
-  const gain = ctx.createGain();
-  lfo.connect(lfoG);
-  lfoG.connect(osc.frequency);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.type      = 'sine';
-  osc.frequency.setValueAtTime(350, t);
-  osc.frequency.exponentialRampToValueAtTime(150, t + 0.5);
-  lfo.frequency.setValueAtTime(12, t);
-  lfoG.gain.setValueAtTime(60, t);
-  gain.gain.setValueAtTime(0.3, t);
-  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
-  lfo.start(t); lfo.stop(t + 0.55);
-  osc.start(t); osc.stop(t + 0.55);
-}
-
-const wrongSounds = [soundWrong1, soundWrong2, soundWrong3, soundWrong4];
-
-/* --- quiz complete fanfare --- */
-function soundVictory(ctx) {
-  const t = ctx.currentTime;
-  // melody: C5 E5 G5 E5 G5 C6
-  [[523,0],[659,0.12],[784,0.24],[659,0.36],[784,0.48],[1047,0.62]].forEach(([f,d]) =>
-    playTone(f, t+d, 0.2, 'triangle', 0.38, ctx)
-  );
-}
-
-async function playCorrect() {
-  if (muted) return;
-  const ctx = getCtx();
-  if (ctx.state === 'suspended') await ctx.resume();
-  const fn = correctSounds[Math.floor(Math.random() * correctSounds.length)];
-  fn(ctx);
-}
-
-async function playWrong() {
-  if (muted) return;
-  const ctx = getCtx();
-  if (ctx.state === 'suspended') await ctx.resume();
-  const fn = wrongSounds[Math.floor(Math.random() * wrongSounds.length)];
-  fn(ctx);
-}
-
-async function playVictory() {
-  if (muted) return;
-  const ctx = getCtx();
-  if (ctx.state === 'suspended') await ctx.resume();
-  soundVictory(ctx);
-}
-
-/* ── mute button ── */
-function toggleMute() {
-  muted = !muted;
-  document.querySelectorAll('.mute-btn').forEach(b => b.textContent = muted ? '🔇' : '🔊');
-}
-
-// ══════════════════════════════════════════════
-//  EVENT LISTENERS
-// ══════════════════════════════════════════════
-document.querySelectorAll('.diff-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selectedDiff = btn.dataset.diff;
+  // Hear-it button
+  document.getElementById('hear-btn').addEventListener('click', () => {
+    speakWord(word, audioUrl);
   });
-});
 
-document.getElementById('btn-start').addEventListener('click', () => { getCtx(); startQuiz(); });
+  // More meanings toggle
+  const moreBtn = document.getElementById('more-btn');
+  if (moreBtn) {
+    moreBtn.addEventListener('click', () => {
+      const panel = document.getElementById('extra-meanings');
+      const open  = panel.classList.toggle('open');
+      moreBtn.textContent = open
+        ? `Hide extra meanings`
+        : `Show more meanings (${extras.length})`;
+    });
+  }
+}
 
+// ── SPEAK ──────────────────────────────────────
+function speakWord(word, audioUrl) {
+  stopAnyAudio();
 
-document.getElementById('btn-same-diff').addEventListener('click', () => {
-  startQuiz(); // same difficulty
-});
+  const hearBtn = document.getElementById('hear-btn');
+  if (hearBtn) { hearBtn.classList.add('playing'); hearBtn.textContent = '🔊 Playing…'; }
 
-document.getElementById('btn-menu').addEventListener('click', () => {
-  showScreen('screen-welcome');
-});
+  const done = () => {
+    if (hearBtn) { hearBtn.classList.remove('playing'); hearBtn.textContent = '🔊 Hear it!'; }
+  };
+
+  // Try the API's audio file first (better quality)
+  if (audioUrl) {
+    currentAudio = new Audio(audioUrl);
+    currentAudio.onended  = done;
+    currentAudio.onerror  = () => ttsSpeak(word, done);
+    currentAudio.play().catch(() => ttsSpeak(word, done));
+    return;
+  }
+
+  ttsSpeak(word, done);
+}
+
+function ttsSpeak(word, done) {
+  if (!('speechSynthesis' in window)) { done(); return; }
+
+  window.speechSynthesis.cancel();
+  const utt          = new SpeechSynthesisUtterance(word);
+  utt.lang           = 'en-US';
+  utt.rate           = 0.85;
+  utt.onend          = done;
+  utt.onerror        = done;
+  currentUtterance   = utt;
+  window.speechSynthesis.speak(utt);
+}
+
+function stopAnyAudio() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentUtterance && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+  currentUtterance = null;
+}
+
+// ── HELPERS ────────────────────────────────────
+function getPhonetic(entry) {
+  if (entry.phonetic) return entry.phonetic;
+  const p = (entry.phonetics || []).find(p => p.text);
+  return p ? p.text : null;
+}
+
+function getAudioUrl(entry) {
+  const list = entry.phonetics || [];
+  const p = list.find(p => p.audio && p.audio.trim());
+  if (!p) return null;
+  // Some URLs come without protocol
+  const url = p.audio;
+  return url.startsWith('//') ? 'https:' + url : url;
+}
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ── LOADING / ERROR / WELCOME ──────────────────
+function showLoading() {
+  area.innerHTML = `
+    <div class="spinner-wrap">
+      <div class="spinner"></div>
+      <div class="spinner-text">Looking it up…</div>
+    </div>`;
+}
+
+function showError(word) {
+  area.innerHTML = `
+    <div class="error-card">
+      <div class="error-icon">🤔</div>
+      <div class="error-title">Hmm, we couldn't find "${esc(word)}"</div>
+      <div class="error-msg">Check the spelling and try again!</div>
+    </div>`;
+}
+
+function showWelcome() {
+  const suggestions = ['happy', 'elephant', 'volcano', 'brave', 'ocean', 'rainbow'];
+  area.innerHTML = `
+    <div class="welcome-hint">
+      <div class="welcome-title">Try one of these words:</div>
+      <div class="hint-bubbles">
+        ${suggestions.map(w => `<button class="hint-bubble" data-word="${w}">${w}</button>`).join('')}
+      </div>
+    </div>`;
+
+  document.querySelectorAll('.hint-bubble').forEach(b => {
+    b.addEventListener('click', () => {
+      input.value = b.dataset.word;
+      doSearch();
+    });
+  });
+}
 </script>
 </body>
 </html>
