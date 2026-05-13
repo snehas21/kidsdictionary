@@ -54,7 +54,7 @@
 
     .search-input {
       width: 100%;
-      padding: 18px 60px 18px 22px;
+      padding: 18px 130px 18px 22px;
       border: none;
       border-radius: 50px;
       font-size: 1.2rem;
@@ -91,6 +91,67 @@
 
     .search-btn:hover { transform: translateY(-50%) scale(1.05); }
     .search-btn:active { transform: translateY(-50%) scale(0.97); }
+
+    .mic-btn {
+      position: absolute;
+      right: 106px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.2rem;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.45);
+      transition: transform 0.15s, box-shadow 0.15s;
+      flex-shrink: 0;
+    }
+
+    .mic-btn:hover { transform: translateY(-50%) scale(1.1); }
+    .mic-btn:active { transform: translateY(-50%) scale(0.95); }
+
+    .mic-btn.listening {
+      background: linear-gradient(135deg, #f12711, #f5af19);
+      box-shadow: 0 0 0 0 rgba(241, 39, 17, 0.5);
+      animation: mic-pulse 1s ease-out infinite;
+    }
+
+    @keyframes mic-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(241, 39, 17, 0.5); }
+      70%  { box-shadow: 0 0 0 14px rgba(241, 39, 17, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(241, 39, 17, 0); }
+    }
+
+    /* mic status toast */
+    .mic-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(30, 30, 40, 0.9);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 999;
+    }
+
+    .mic-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
 
     /* ── WORD CARD ── */
     .card {
@@ -369,8 +430,11 @@
       autocorrect="off"
       spellcheck="false"
     />
+    <button class="mic-btn" id="mic-btn" title="Speak a word">🎤</button>
     <button class="search-btn" id="search-btn">Search 🔍</button>
   </div>
+
+  <div class="mic-toast" id="mic-toast"></div>
 
   <div id="result-area"></div>
 
@@ -390,6 +454,83 @@ showWelcome();
 // ── EVENT LISTENERS ────────────────────────────
 btn.addEventListener('click', doSearch);
 input.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+// ── SPEECH RECOGNITION (mic button) ────────────
+const micBtn   = document.getElementById('mic-btn');
+const micToast = document.getElementById('mic-toast');
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let micListening = false;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang        = 'en-US';
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    micListening = true;
+    micBtn.classList.add('listening');
+    micBtn.textContent = '⏹';
+    showToast('🎤 Listening… say a word!');
+  };
+
+  recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript.trim();
+    // Show interim result in the input as the kid speaks
+    input.value = transcript;
+    if (e.results[0].isFinal) {
+      hideToast();
+      stopMic();
+      doSearch();
+    }
+  };
+
+  recognition.onerror = (e) => {
+    stopMic();
+    if (e.error === 'not-allowed') {
+      showToast('❌ Microphone permission denied', 3000);
+    } else if (e.error !== 'aborted') {
+      showToast('❌ Didn\'t catch that — try again!', 2500);
+    }
+  };
+
+  recognition.onend = () => stopMic();
+
+  micBtn.addEventListener('click', () => {
+    if (micListening) {
+      recognition.abort();
+    } else {
+      input.value = '';
+      area.innerHTML = '';
+      recognition.start();
+    }
+  });
+} else {
+  // Browser doesn't support speech recognition — hide mic button
+  micBtn.style.display = 'none';
+  // Restore original padding since mic button is gone
+  document.querySelector('.search-input').style.paddingRight = '130px';
+}
+
+function stopMic() {
+  micListening = false;
+  micBtn.classList.remove('listening');
+  micBtn.textContent = '🎤';
+}
+
+let toastTimer = null;
+function showToast(msg, duration) {
+  micToast.textContent = msg;
+  micToast.classList.add('show');
+  clearTimeout(toastTimer);
+  if (duration) toastTimer = setTimeout(hideToast, duration);
+}
+
+function hideToast() {
+  micToast.classList.remove('show');
+}
 
 // ── SEARCH ─────────────────────────────────────
 async function doSearch() {
